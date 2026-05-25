@@ -1,0 +1,95 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active'); // specific class for button animation if needed
+        });
+    }
+
+    // Smooth Scroll for Navigation Links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+
+            if (targetElement) {
+                // Close mobile menu if open
+                if (navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                }
+
+                targetElement.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // Scroll Animation (Intersection Observer)
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px" // Trigger slightly before element comes into view
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                // Optional: Stop observing once visible if you want it to animate only once
+                // observer.unobserve(entry.target); 
+            }
+        });
+    }, observerOptions);
+
+    const hiddenElements = document.querySelectorAll('.animate-on-scroll');
+    hiddenElements.forEach((el) => observer.observe(el));
+
+    // Certificate Modal Functionality
+    const modal = document.getElementById('certModal');
+    const modalImg = document.getElementById('certModalImg');
+    const modalCaption = document.getElementById('certModalCaption');
+    const closeModal = document.querySelector('.cert-modal-close');
+
+    // Add click event to all certificate cards
+    document.querySelectorAll('.cert-card').forEach(card => {
+        card.addEventListener('click', function (e) {
+            // Don't open modal if clicking on download link
+            if (e.target.closest('.cert-download')) {
+                return;
+            }
+
+            const imgElement = this.querySelector('.cert-image');
+            if (imgElement) {
+                modal.style.display = 'block';
+                modalImg.src = imgElement.src;
+                modalCaption.innerHTML = this.querySelector('h3').textContent;
+            }
+        });
+    });
+
+    // Close modal when clicking the X
+    if (closeModal) {
+        closeModal.addEventListener('click', function () {
+            modal.style.display = 'none';
+        });
+    }
+
+    // Close modal when clicking outside the image
+    modal.addEventListener('click', function (e) {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modal.style.display === 'block') {
+            modal.style.display = 'none';
+        }
+    });
+});

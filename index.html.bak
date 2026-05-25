@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Portfolio of Daksh Patel, a web and app developer passionate about building innovative solutions." />
+  <title>Daksh Patel | Developer Portfolio</title>
+  <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;600;700&display=swap"
+    rel="stylesheet" />
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="#home" class="logo">Daksh.</a>
+      <button class="mobile-menu-btn" aria-label="Toggle Navigation">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#certifications">Certifications</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero-section">
+    <div class="hero-content animate-on-scroll slide-in-left delay-400">
+      <p class="greeting">Hello, I'm</p>
+      <h1 class="gradient-text">Daksh Patel</h1>
+      <h2 class="subtitle">B.Tech Student & Developer</h2>
+      <p class="hero-description">
+        Building digital experiences with code. Passionate about Web & App Development.
+      </p>
+      <div class="hero-buttons">
+        <a href="#projects" class="btn btn-primary">View Work</a>
+        <a href="#contact" class="btn btn-outline">Contact Me</a>
+      </div>
+    </div>
+    <div class="hero-image-wrapper animate-on-scroll slide-in-right">
+      <div class="image-blob"></div>
+      <img src="assets/profile.jpg" alt="Daksh Patel" class="hero-profile-img"
+        onerror="this.src='https://placehold.co/400x400/1e293b/cbd5e1?text=DP';" />
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="section">
+    <div class="container animate-on-scroll">
+      <h2 class="section-title">About Me</h2>
+      <div class="about-content">
+        <div class="about-text">
+          <p>
+            I'm a 3rd-year B.Tech student in Computer Science and Engineering at <strong>Parul University</strong>
+            (Class of 2027).
+          </p>
+          <p>
+            My journey in tech is driven by a curiosity to understand how things work and a desire to build solutions
+            that make a difference. I specialize in modern web technologies and I am currently expanding my expertise in
+            mobile app development.
+          </p>
+          <div class="about-stats">
+            <div class="stat-item">
+              <span class="stat-number">3rd</span>
+              <span class="stat-label">Year Student</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">10+</span>
+              <span class="stat-label">Projects</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section id="skills" class="section bg-alt">
+    <div class="container animate-on-scroll">
+      <h2 class="section-title">Technical Skills</h2>
+      <div class="skills-grid">
+        <!-- Skill Card -->
+        <div class="skill-card">
+          <i class="fab fa-html5 skill-icon" style="color: #e34f26;"></i>
+          <h3>HTML5</h3>
+        </div>
+        <div class="skill-card">
+          <i class="fab fa-css3-alt skill-icon" style="color: #1572b6;"></i>
+          <h3>CSS3</h3>
+        </div>
+        <div class="skill-card">
+          <i class="fab fa-js skill-icon" style="color: #f7df1e;"></i>
+          <h3>JavaScript</h3>
+        </div>
+        <div class="skill-card">
+          <i class="fab fa-php skill-icon" style="color: #777bb4;"></i>
+          <h3>PHP</h3>
+        </div>
+        <div class="skill-card">
+          <i class="fas fa-mobile-alt skill-icon" style="color: #fff;"></i>
+          <h3>App Dev</h3>
+        </div>
+        <div class="skill-card">
+          <i class="fas fa-code skill-icon" style="color: #61dafb;"></i>
+          <h3>React (Learning)</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects" class="section">
+    <div class="container animate-on-scroll">
+      <h2 class="section-title">Featured Projects</h2>
+      <div class="projects-grid">
+        <!-- Project 1 -->
+        <div class="project-card">
+          <div class="project-content">
+            <h3>Portfolio Website</h3>
+            <p>A personal portfolio website designed with a modern dark aesthetics and glassmorphism effects.</p>
+            <div class="project-tags">
+              <span>HTML</span>
+              <span>CSS</span>
+              <span>JS</span>
+            </div>
+            <div class="project-links">
+              <a href="#" class="link-icon"><i class="fab fa-github"></i></a>
+              <a href="#" class="link-icon"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+        </div>
+        <!-- Project 2 Placeholder -->
+        <div class="project-card">
+          <div class="project-content">
+            <h3>E-Commerce Concept</h3>
+            <p>A concept for an online store featuring product listings, a shopping cart, and a checkout flow.</p>
+            <div class="project-tags">
+              <span>PHP</span>
+              <span>MySQL</span>
+              <span>Bootstrap</span>
+            </div>
+            <div class="project-links">
+              <a href="#" class="link-icon"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+        </div>
+        <!-- Project 3 Placeholder -->
+        <div class="project-card">
+          <div class="project-content">
+            <h3>Task Management App</h3>
+            <p>A productivity application to help users organize their daily tasks and improve efficiency.</p>
+            <div class="project-tags">
+              <span>JavaScript</span>
+              <span>Local Storage</span>
+            </div>
+            <div class="project-links">
+              <a href="#" class="link-icon"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Certifications Section -->
+  <section id="certifications" class="section bg-alt">
+    <div class="container animate-on-scroll">
+      <h2 class="section-title">Certifications & Achievements</h2>
+      <div class="certifications-grid">
+
+        <!-- Certificate 1: AWS Academy -->
+        <div class="cert-card" data-cert="aws-academy">
+          <div class="cert-image-wrapper">
+            <div class="cert-placeholder aws-placeholder">
+              <i class="fab fa-aws"></i>
+              <p>AWS Academy</p>
+            </div>
+            <img src="assets/certificates/aws-academy-graduate-cloud-foundations-training-bad.png"
+              alt="AWS Academy Graduate Badge" class="cert-thumb" style="display: none;" />
+            <img src="assets/certificates/daksh_patel_20260121_025451 (1) conv 1.png" alt="AWS Academy Certificate"
+              class="cert-image" style="display: none;" />
+            <div class="cert-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="cert-content">
+            <div class="cert-badge">
+              <i class="fas fa-award"></i>
+            </div>
+            <h3>AWS Academy Graduate</h3>
+            <p class="cert-issuer"><i class="fas fa-building"></i> Amazon Web Services</p>
+            <p class="cert-description">Cloud Foundations Training - Completed AWS Academy certification program</p>
+            <div class="cert-meta">
+              <span class="cert-date"><i class="far fa-calendar"></i> 2025</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificate 2: AWS Student Community Day -->
+        <div class="cert-card" data-cert="aws-scd">
+          <div class="cert-image-wrapper">
+            <div class="cert-placeholder aws-placeholder">
+              <i class="fab fa-aws"></i>
+              <p>AWS Community Day</p>
+            </div>
+            <img src="assets/certificates/aws-student-community-day-participant.png"
+              alt="AWS Student Community Day Badge" class="cert-thumb" style="display: none;" />
+            <img src="assets/certificates/PATEL DAKSH PIYUSHBHAI AWS SCD Certificate conv 1.png"
+              alt="AWS Student Community Day Certificate" class="cert-image" style="display: none;" />
+            <div class="cert-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="cert-content">
+            <div class="cert-badge">
+              <i class="fas fa-users"></i>
+            </div>
+            <h3>AWS Student Community Day</h3>
+            <p class="cert-issuer"><i class="fas fa-building"></i> Amazon Web Services</p>
+            <p class="cert-description">Participant in AWS Student Community Day - Engaged with cloud computing
+              community</p>
+            <div class="cert-meta">
+              <span class="cert-date"><i class="far fa-calendar"></i> 2025</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificate 3: HTML Course -->
+        <div class="cert-card" data-cert="html">
+          <div class="cert-image-wrapper">
+            <div class="cert-placeholder html-placeholder">
+              <i class="fab fa-html5"></i>
+              <p>Simplilearn HTML</p>
+            </div>
+            <img src="assets/certificates/simplilearn - HTML conv 1.png" alt="Simplilearn HTML Certificate"
+              class="cert-image" style="display: none;" />
+            <div class="cert-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="cert-content">
+            <div class="cert-badge">
+              <i class="fas fa-certificate"></i>
+            </div>
+            <h3>HTML Full Course</h3>
+            <p class="cert-issuer"><i class="fas fa-building"></i> Simplilearn</p>
+            <p class="cert-description">Build a Website Tutorial - Complete HTML course certification</p>
+            <div class="cert-meta">
+              <span class="cert-date"><i class="far fa-calendar"></i> 2025</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificate 4: NPTEL Networks -->
+        <div class="cert-card" data-cert="nptel">
+          <div class="cert-image-wrapper">
+            <div class="cert-placeholder nptel-placeholder">
+              <i class="fas fa-network-wired"></i>
+              <p>NPTEL Elite</p>
+            </div>
+            <img src="assets/certificates/NPTEL CN certificate conv 1.png" alt="NPTEL Certificate" class="cert-image"
+              style="display: none;" />
+            <div class="cert-overlay">
+              <i class="fas fa-medal"></i>
+            </div>
+          </div>
+          <div class="cert-content">
+            <div class="cert-badge elite">
+              <i class="fas fa-star"></i>
+            </div>
+            <h3>Computer Networks & Internet Protocol</h3>
+            <p class="cert-issuer"><i class="fas fa-building"></i> IIT Kharagpur - NPTEL</p>
+            <p class="cert-description">Elite certification with 75% score - Top 2% performer</p>
+            <div class="cert-meta">
+              <span class="cert-date"><i class="far fa-calendar"></i> Jan-Apr 2025</span>
+              <span class="cert-score"><i class="fas fa-chart-line"></i> 75% (Top 2%)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificate 5: freeCodeCamp JavaScript -->
+        <div class="cert-card" data-cert="freecodecamp-js">
+          <div class="cert-image-wrapper">
+            <div class="cert-placeholder js-placeholder">
+              <i class="fab fa-js"></i>
+              <p>freeCodeCamp</p>
+            </div>
+            <img src="assets/certificates/free_codecamp - JS conv 1.png" alt="freeCodeCamp Certificate"
+              class="cert-image" style="display: none;" />
+            <div class="cert-overlay">
+              <i class="fas fa-file-pdf"></i>
+            </div>
+          </div>
+          <div class="cert-content">
+            <div class="cert-badge">
+              <i class="fas fa-certificate"></i>
+            </div>
+            <h3>JavaScript Programming</h3>
+            <p class="cert-issuer"><i class="fas fa-building"></i> freeCodeCamp</p>
+            <p class="cert-description">Complete JavaScript programming course certification</p>
+            <div class="cert-meta">
+              <span class="cert-date"><i class="far fa-calendar"></i> 2025</span>
+              <a href="assets/certificates/free_codecamp - JS conv 1.png" target="_blank" class="cert-download">
+                <i class="fas fa-eye"></i> View Certificate
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificate 6: Edureka JavaScript -->
+        <div class="cert-card" data-cert="edureka-js">
+          <div class="cert-image-wrapper">
+            <div class="cert-placeholder js-placeholder"
+              style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%);">
+              <i class="fab fa-js" style="color: #f7df1e;"></i>
+              <p style="color: #94a3b8;">Edureka</p>
+            </div>
+            <img src="assets/certificates/edureka - JS conv 1.png" alt="Edureka Certificate" class="cert-image"
+              style="display: none;" />
+            <div class="cert-overlay">
+              <i class="fas fa-file-pdf"></i>
+            </div>
+          </div>
+          <div class="cert-content">
+            <div class="cert-badge">
+              <i class="fas fa-certificate"></i>
+            </div>
+            <h3>JavaScript Course</h3>
+            <p class="cert-issuer"><i class="fas fa-building"></i> Edureka</p>
+            <p class="cert-description">JavaScript programming fundamentals and advanced concepts</p>
+            <div class="cert-meta">
+              <span class="cert-date"><i class="far fa-calendar"></i> 2025</span>
+              <a href="assets/certificates/edureka - JS conv 1.png" target="_blank" class="cert-download">
+                <i class="fas fa-eye"></i> View Certificate
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificate 7: Open Source -->
+        <div class="cert-card" data-cert="opensource">
+          <div class="cert-image-wrapper">
+            <div class="cert-placeholder opensource-placeholder">
+              <i class="fas fa-code-branch"></i>
+              <p>Open Source</p>
+            </div>
+            <img src="assets/certificates/open source conv 1.png" alt="Open Source Certificate" class="cert-image"
+              style="display: none;" />
+            <div class="cert-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="cert-content">
+            <div class="cert-badge">
+              <i class="fas fa-certificate"></i>
+            </div>
+            <h3>What is Open Source?</h3>
+            <p class="cert-issuer"><i class="fas fa-building"></i> IBM SkillsBuild</p>
+            <p class="cert-description">Understanding open source software development and collaboration</p>
+            <div class="cert-meta">
+              <span class="cert-date"><i class="far fa-calendar"></i> 2025</span>
+              <a href="assets/certificates/open source conv 1.png" target="_blank" class="cert-download">
+                <i class="fas fa-eye"></i> View Certificate
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificate 8: AWS Value Added Course -->
+        <div class="cert-card" data-cert="aws-value">
+          <div class="cert-image-wrapper">
+            <div class="cert-placeholder">
+              <i class="fab fa-aws"></i>
+              <p>Parul University</p>
+            </div>
+            <div class="cert-overlay">
+              <i class="fas fa-file-pdf"></i>
+            </div>
+          </div>
+          <div class="cert-content">
+            <div class="cert-badge">
+              <i class="fas fa-award"></i>
+            </div>
+            <h3>AWS Value Added Course</h3>
+            <p class="cert-issuer"><i class="fas fa-building"></i> Parul University</p>
+            <p class="cert-description">Participation certificate for AWS cloud computing value-added course</p>
+            <div class="cert-meta">
+              <span class="cert-date"><i class="far fa-calendar"></i> 2025</span>
+              <a href="#" class="cert-download">
+                <i class="fas fa-eye"></i> View Certificate
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Certificate Modal -->
+  <div id="certModal" class="cert-modal">
+    <span class="cert-modal-close">&times;</span>
+    <img class="cert-modal-content" id="certModalImg" />
+    <div id="certModalCaption"></div>
+  </div>
+
+  <!-- Contact Section -->
+  <section id="contact" class="section bg-alt">
+    <div class="container animate-on-scroll">
+      <h2 class="section-title">Get In Touch</h2>
+      <div class="contact-wrapper">
+        <div class="contact-info">
+          <p>Feel free to reach out for collaborations or just to say hi!</p>
+          <a href="mailto:dakshp860@gmail.com" class="contact-item">
+            <i class="fas fa-envelope"></i> dakshp860@gmail.com
+          </a>
+          <div class="social-links-large">
+            <a href="https://www.linkedin.com/in/daksh-patel-7a57b222a/" target="_blank"><i
+                class="fab fa-linkedin"></i></a>
+            <a href="https://github.com/Daksh-1909" target="_blank"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 Daksh Patel. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
