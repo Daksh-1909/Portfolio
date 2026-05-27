@@ -17,7 +17,7 @@ export const About = () => {
             <h3>Who I Am</h3>
             <div className="about-text">
               <p>
-                I am a 3rd-year B.Tech student in <strong>Computer Science and Engineering</strong> at <strong>Parul University</strong> (Class of 2027).
+                I am a 4th-year B.Tech student in <strong>Computer Science and Engineering</strong> at <strong>Parul University</strong> (Class of 2027).
               </p>
               <p>
                 My drive for technology originates from an insatiable curiosity about how modern digital platforms operate. I love creating software solutions that combine elegant code architectures with stunning, user-centric interfaces.
@@ -30,7 +30,7 @@ export const About = () => {
 
           <div className="about-stats">
             <div className="stat-card glass-card">
-              <div className="stat-number">3rd</div>
+              <div className="stat-number">4th</div>
               <div className="stat-label">Year Student</div>
             </div>
             <div className="stat-card glass-card">

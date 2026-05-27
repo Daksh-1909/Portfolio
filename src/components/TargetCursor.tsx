@@ -31,6 +31,13 @@ export const TargetCursor: React.FC<TargetCursorProps> = ({
     const [isLocked, setIsLocked] = useState(false);
     const isVisible = useRef(false);
 
+    // Dynamic states for snapping adaptation
+    const [cursorColors, setCursorColors] = useState<{ left: string; right: string }>({
+        left: color,
+        right: color,
+    });
+    const [borderRadius, setBorderRadius] = useState<string>('0px');
+
     // Internal state for tracking without triggering re-renders
     const mouse = useRef({ x: -100, y: -100, absX: -100, absY: -100 });
     const cursor = useRef({ x: -100, y: -100, scale: 1, rotate: 0, opacity: 1 });
@@ -72,13 +79,56 @@ export const TargetCursor: React.FC<TargetCursorProps> = ({
         if (target && inside) {
             targetElement.current = target;
             targetRect.current = target.getBoundingClientRect();
+
+            // Extract border radius
+            const computedStyle = window.getComputedStyle(target);
+            const radius = computedStyle.borderRadius;
+            setBorderRadius(radius && radius !== '0px' ? radius : '0px');
+
+            // Adapt colors based on target classes and styles
+            let leftColor = color;
+            let rightColor = color;
+
+            const customColors = target.getAttribute('data-cursor-colors');
+            if (customColors) {
+                const parts = customColors.split(',');
+                if (parts.length === 2) {
+                    leftColor = parts[0].trim();
+                    rightColor = parts[1].trim();
+                } else if (parts.length === 1) {
+                    leftColor = parts[0].trim();
+                    rightColor = parts[0].trim();
+                }
+            } else if (target.classList.contains('btn-primary')) {
+                leftColor = '#06b6d4'; // accent-cyan
+                rightColor = '#8b5cf6'; // accent-violet
+            } else if (target.classList.contains('btn-outline')) {
+                leftColor = '#06b6d4';
+                rightColor = '#06b6d4';
+            } else {
+                const borderColor = computedStyle.borderColor;
+                const textColor = computedStyle.color;
+                if (borderColor && borderColor !== 'transparent' && !borderColor.startsWith('rgba(0, 0, 0, 0)')) {
+                    leftColor = borderColor;
+                    rightColor = borderColor;
+                } else if (textColor) {
+                    leftColor = textColor;
+                    rightColor = textColor;
+                }
+            }
+
+            setCursorColors({ left: leftColor, right: rightColor });
             if (!isLocked) setIsLocked(true);
         } else {
             targetElement.current = null;
             targetRect.current = null;
-            if (isLocked) setIsLocked(false);
+            if (isLocked) {
+                setIsLocked(false);
+                setCursorColors({ left: color, right: color });
+                setBorderRadius('0px');
+            }
         }
-    }, [containerRef, targetSelector, isLocked]);
+    }, [containerRef, targetSelector, isLocked, color]);
 
     const animate = useCallback(() => {
         if (!cursorRef.current) return;
@@ -146,14 +196,27 @@ export const TargetCursor: React.FC<TargetCursorProps> = ({
         };
     }, [updateMouse, animate]);
 
-    const cornerStyle: React.CSSProperties = {
-        position: 'absolute',
-        width: '8px',
-        height: '8px',
-        borderColor: color,
-        borderStyle: 'solid',
-        transition: `all ${hoverDuration}s cubic-bezier(0.23, 1, 0.32, 1)`,
-        pointerEvents: 'none',
+    const cornerStyle = (side: 'left' | 'right', position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'): React.CSSProperties => {
+        const sideColor = side === 'left' ? cursorColors.left : cursorColors.right;
+        
+        let specificRadius = '0px';
+        if (isLocked && borderRadius !== '0px') {
+            if (position === 'top-left') specificRadius = `${borderRadius} 0 0 0`;
+            if (position === 'top-right') specificRadius = `0 ${borderRadius} 0 0`;
+            if (position === 'bottom-left') specificRadius = `0 0 0 ${borderRadius}`;
+            if (position === 'bottom-right') specificRadius = `0 0 ${borderRadius} 0`;
+        }
+
+        return {
+            position: 'absolute',
+            width: isLocked ? '14px' : '8px',
+            height: isLocked ? '14px' : '8px',
+            borderColor: sideColor,
+            borderStyle: 'solid',
+            borderRadius: specificRadius,
+            transition: `all ${hoverDuration}s cubic-bezier(0.23, 1, 0.32, 1)`,
+            pointerEvents: 'none',
+        };
     };
 
     const containerSelector = containerRef ? '.target-cursor-area' : 'body';
@@ -186,20 +249,29 @@ export const TargetCursor: React.FC<TargetCursorProps> = ({
                 .cursor-inner {
                     position: relative;
                     transition: width ${hoverDuration}s cubic-bezier(0.23, 1, 0.32, 1), 
-                                height ${hoverDuration}s cubic-bezier(0.23, 1, 0.32, 1);
-                    will-change: width, height, transform;
+                                height ${hoverDuration}s cubic-bezier(0.23, 1, 0.32, 1),
+                                border-radius ${hoverDuration}s cubic-bezier(0.23, 1, 0.32, 1);
+                    will-change: width, height, transform, border-radius;
                 }
             `}</style>
 
-            <div className="cursor-inner" style={{ width: 24, height: 24, transform: 'translate(-50%, -50%)' }}>
+            <div 
+                className="cursor-inner" 
+                style={{ 
+                    width: 24, 
+                    height: 24, 
+                    transform: 'translate(-50%, -50%)',
+                    borderRadius: borderRadius,
+                }}
+            >
                 {/* Top Left */}
-                <div style={{ ...cornerStyle, top: 0, left: 0, borderWidth: '2px 0 0 2px' }} />
+                <div style={{ ...cornerStyle('left', 'top-left'), top: 0, left: 0, borderWidth: '2px 0 0 2px' }} />
                 {/* Top Right */}
-                <div style={{ ...cornerStyle, top: 0, right: 0, borderWidth: '2px 2px 0 0' }} />
+                <div style={{ ...cornerStyle('right', 'top-right'), top: 0, right: 0, borderWidth: '2px 2px 0 0' }} />
                 {/* Bottom Left */}
-                <div style={{ ...cornerStyle, bottom: 0, left: 0, borderWidth: '0 0 2px 2px' }} />
+                <div style={{ ...cornerStyle('left', 'bottom-left'), bottom: 0, left: 0, borderWidth: '0 0 2px 2px' }} />
                 {/* Bottom Right */}
-                <div style={{ ...cornerStyle, bottom: 0, right: 0, borderWidth: '0 2px 2px 0' }} />
+                <div style={{ ...cornerStyle('right', 'bottom-right'), bottom: 0, right: 0, borderWidth: '0 2px 2px 0' }} />
 
                 {/* Center Dot (Visible when not locked) */}
                 <div style={{
@@ -208,7 +280,7 @@ export const TargetCursor: React.FC<TargetCursorProps> = ({
                     left: '50%',
                     width: '4px',
                     height: '4px',
-                    background: color,
+                    background: cursorColors.left,
                     borderRadius: '50%',
                     transform: 'translate(-50%, -50%)',
                     opacity: isLocked ? 0 : 1,

@@ -29,7 +29,7 @@ export const Hero = () => {
           </h1>
           <h2 className="hero-subtitle">B.Tech Student & Developer</h2>
           <p className="hero-description">
-            Building digital experiences with code. A passionate 3rd-year CS student engineering high-performance web applications and sleek mobile solutions.
+            Building digital experiences with code. A passionate 4th-year CS student engineering high-performance web applications and sleek mobile solutions.
           </p>
           <div className="hero-actions">
             <a 
