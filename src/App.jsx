@@ -9,6 +9,7 @@ import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { ToastContainer } from './components/Toast';
 import { SplashScreen } from './components/SplashScreen';
+import { TargetCursor } from './components/TargetCursor';
 
 function App() {
   const [toasts, setToasts] = useState([]);
@@ -25,6 +26,9 @@ function App() {
 
   return (
     <>
+      {/* Target Cursor Effect */}
+      <TargetCursor hideDefaultCursor={true} color="#22d3ee" targetSelector="button, a, [data-target='true'], .cursor-target, .project-card, .cert-card" />
+
       {/* Intro Starting Animation Screen */}
       {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
 
@@ -54,3 +58,4 @@ function App() {
 }
 
 export default App;
+
