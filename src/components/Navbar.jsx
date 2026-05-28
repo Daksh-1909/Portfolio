@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-export const Navbar = () => {
+export const Navbar = ({ darkMode, toggleDarkMode }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
@@ -61,13 +61,23 @@ export const Navbar = () => {
           Daksh<span>.</span>
         </a>
 
-        <button 
-          className="mobile-menu-toggle" 
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label="Toggle mobile menu"
-        >
-          <i className={isMobileMenuOpen ? 'fas fa-times' : 'fas fa-bars'}></i>
-        </button>
+        <div className="nav-controls-mobile">
+          <button 
+            className="theme-toggle" 
+            onClick={toggleDarkMode}
+            aria-label="Toggle theme"
+          >
+            <i className={darkMode ? 'fas fa-sun' : 'fas fa-moon'}></i>
+          </button>
+
+          <button 
+            className="mobile-menu-toggle" 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle mobile menu"
+          >
+            <i className={isMobileMenuOpen ? 'fas fa-times' : 'fas fa-bars'}></i>
+          </button>
+        </div>
 
         <ul className={`nav-links ${isMobileMenuOpen ? 'active' : ''}`}>
           {navLinks.map((link) => (
@@ -81,6 +91,15 @@ export const Navbar = () => {
               </a>
             </li>
           ))}
+          <li className="desktop-theme-toggle-li">
+            <button 
+              className="theme-toggle" 
+              onClick={toggleDarkMode}
+              aria-label="Toggle theme"
+            >
+              <i className={darkMode ? 'fas fa-sun' : 'fas fa-moon'}></i>
+            </button>
+          </li>
         </ul>
       </div>
     </nav>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { About } from './components/About';
@@ -14,6 +14,23 @@ import { TargetCursor } from './components/TargetCursor';
 function App() {
   const [toasts, setToasts] = useState([]);
   const [showSplash, setShowSplash] = useState(true);
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem('theme') === 'dark';
+  });
+
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add('dark-mode');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.body.classList.remove('dark-mode');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [darkMode]);
+
+  const toggleDarkMode = () => {
+    setDarkMode((prev) => !prev);
+  };
 
   const addToast = (message, type = 'success') => {
     const id = Date.now();
@@ -40,7 +57,7 @@ function App() {
       <div className="glow-orb glow-orb-violet"></div>
 
       {/* Components Stack */}
-      <Navbar />
+      <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
       <main>
         <Hero />
         <About />
