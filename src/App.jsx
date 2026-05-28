@@ -15,7 +15,8 @@ function App() {
   const [toasts, setToasts] = useState([]);
   const [showSplash, setShowSplash] = useState(true);
   const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem('theme') === 'dark';
+    const savedTheme = localStorage.getItem('theme');
+    return savedTheme ? savedTheme === 'dark' : true;
   });
 
   useEffect(() => {
