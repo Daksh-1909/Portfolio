@@ -29,29 +29,20 @@ function App() {
     }
   }, [darkMode]);
 
-  const [themeTransition, setThemeTransition] = useState({ active: false, x: 0, y: 0 });
+  const [themeTransition, setThemeTransition] = useState({ active: false });
 
-  const toggleDarkMode = (e) => {
-    let x = window.innerWidth / 2;
-    let y = window.innerHeight / 2;
+  const toggleDarkMode = () => {
+    setThemeTransition({ active: true });
     
-    // Capture user click coordinates if event is provided
-    if (e && e.clientX && e.clientY) {
-      x = e.clientX;
-      y = e.clientY;
-    }
-    
-    setThemeTransition({ active: true, x, y });
-    
-    // Toggle the theme state exactly at the midpoint peak of the wave expansion
+    // Toggle the theme state exactly at the midpoint peak of the diagonal slashes overlap
     setTimeout(() => {
       setDarkMode((prev) => !prev);
-    }, 420);
+    }, 370);
     
-    // Deactivate the overlay after animation completion
+    // Deactivate the overlay container after animation completion
     setTimeout(() => {
-      setThemeTransition({ active: false, x: 0, y: 0 });
-    }, 850);
+      setThemeTransition({ active: false });
+    }, 800);
   };
 
   const addToast = (message, type = 'success') => {
@@ -65,15 +56,12 @@ function App() {
 
   return (
     <>
-      {/* Premium Ambient Theme Wave Transition Overlay */}
+      {/* Premium Cyber Slash Theme Transition Overlay */}
       {themeTransition.active && (
-        <div 
-          className="theme-transition-overlay active" 
-          style={{ 
-            left: `${themeTransition.x}px`, 
-            top: `${themeTransition.y}px` 
-          }} 
-        />
+        <div className="slash-transition-container active">
+          <div className="slash-panel slash-panel-top" />
+          <div className="slash-panel slash-panel-bottom" />
+        </div>
       )}
 
       {/* Target Cursor Effect */}

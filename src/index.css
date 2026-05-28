@@ -1537,35 +1537,71 @@ body.dark-mode .splash-text {
   color: #ffffff;
 }
 
-/* Theme Transition Radial Overlay */
-.theme-transition-overlay {
+/* Cyber Slash Theme Transition Overlay */
+.slash-transition-container {
   position: fixed;
-  border-radius: 50%;
+  inset: 0;
   pointer-events: none;
   z-index: 999999;
-  transform: translate(-50%, -50%) scale(0);
-  opacity: 0;
-  background: radial-gradient(circle, hsl(var(--accent-cyan)) 0%, hsl(var(--accent-violet)) 100%);
-  box-shadow: 0 0 100px hsl(var(--accent-cyan) / 0.4);
-  width: 100vmax;
-  height: 100vmax;
+  overflow: hidden;
 }
 
-.theme-transition-overlay.active {
-  animation: theme-wave 0.85s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+.slash-panel {
+  position: absolute;
+  width: 150%;
+  height: 60vh;
+  background: linear-gradient(135deg, #ffffff, #f7f7f9);
+  border-bottom: 5px solid hsl(var(--accent-cyan));
+  box-shadow: 0 0 50px hsl(var(--accent-cyan) / 0.4);
+  transform: skewY(-15deg) translateY(0);
 }
 
-@keyframes theme-wave {
+body.dark-mode .slash-panel {
+  background: linear-gradient(135deg, #1A1A1B, #0b1329);
+  border-color: hsl(var(--accent-cyan));
+  box-shadow: 0 0 50px hsl(var(--accent-cyan) / 0.4);
+}
+
+.slash-panel-top {
+  top: -75vh;
+  left: -25%;
+}
+
+.slash-panel-bottom {
+  bottom: -75vh;
+  left: -25%;
+  border-bottom: none;
+  border-top: 5px solid hsl(var(--accent-cyan));
+}
+
+.slash-transition-container.active .slash-panel-top {
+  animation: slash-in-top 0.8s cubic-bezier(0.86, 0, 0.07, 1) forwards;
+}
+
+.slash-transition-container.active .slash-panel-bottom {
+  animation: slash-in-bottom 0.8s cubic-bezier(0.86, 0, 0.07, 1) forwards;
+}
+
+@keyframes slash-in-top {
   0% {
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 1;
+    transform: skewY(-15deg) translateY(0);
   }
-  50% {
-    transform: translate(-50%, -50%) scale(2.2);
-    opacity: 1;
+  42%, 58% {
+    transform: skewY(-15deg) translateY(80vh);
   }
   100% {
-    transform: translate(-50%, -50%) scale(3.5);
-    opacity: 0;
+    transform: skewY(-15deg) translateY(170vh);
+  }
+}
+
+@keyframes slash-in-bottom {
+  0% {
+    transform: skewY(-15deg) translateY(0);
+  }
+  42%, 58% {
+    transform: skewY(-15deg) translateY(-80vh);
+  }
+  100% {
+    transform: skewY(-15deg) translateY(-170vh);
   }
 }
