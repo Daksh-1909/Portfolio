@@ -29,7 +29,7 @@ export const ParticleTransitionCanvas = ({
     canvas.width = width;
     canvas.height = height;
 
-    // 1. Pixel Downsampling Setup
+    // 1. Pixel Downsampling Setup (High-Density Step Size)
     const screenWidth = screenshotCanvas.width;
     const screenHeight = screenshotCanvas.height;
     
@@ -48,8 +48,17 @@ export const ParticleTransitionCanvas = ({
       : { data: new Uint8ClampedArray(), width: 0, height: 0 };
 
     const area = width * height;
-    // Adaptively target ~12,000 active particles for 60fps performance across devices
-    const step = Math.max(6, Math.round(Math.sqrt(area / 12000)));
+    // Set a very small step size (3 to 5) to produce extremely fine, sand-like particles
+    const step = Math.max(3, Math.round(Math.sqrt(area / 75000)));
+
+    // Calculate total possible grid points
+    const cols = Math.floor(width / step);
+    const rows = Math.floor(height / step);
+    const totalPoints = cols * rows;
+
+    // Target a maximum count of 25,000 tiny particles for smooth 60fps rendering
+    const maxParticles = 25000;
+    const skipRatio = totalPoints > maxParticles ? maxParticles / totalPoints : 1.0;
 
     const particles = [];
     const pixelData = screenshotData.data;
@@ -70,10 +79,12 @@ export const ParticleTransitionCanvas = ({
     ];
 
     const morphPalette = direction === 'to-dark' ? darkMorphColors : lightMorphColors;
-    const originalSize = step * 1.15; // Slightly larger than step to prevent grid lines when solid
 
     for (let y = 0; y < height; y += step) {
       for (let x = 0; x < width; x += step) {
+        // Probability filter to maintain exactly 25,000 maximum particles
+        if (Math.random() > skipRatio) continue;
+
         const index = (y * width + x) * 4;
         const r = pixelData[index];
         const g = pixelData[index + 1];
@@ -83,12 +94,12 @@ export const ParticleTransitionCanvas = ({
         // Skip fully transparent pixels
         if (a < 10) continue;
 
-        // Add small random noise to spacing to break up uniform grid shapes
-        const jitterX = (Math.random() - 0.5) * 1.5;
-        const jitterY = (Math.random() - 0.5) * 1.5;
+        // Add subtle random coordinate jitter
+        const jitterX = (Math.random() - 0.5) * 2;
+        const jitterY = (Math.random() - 0.5) * 2;
 
-        // Assign a random target morph color from the palette
         const targetColor = morphPalette[Math.floor(Math.random() * morphPalette.length)];
+        const originalParticleSize = Math.random() * 1.0 + 0.6; // Extremely small (0.6px to 1.6px)
 
         particles.push({
           x: x + jitterX,
@@ -111,8 +122,9 @@ export const ParticleTransitionCanvas = ({
           targetR: targetColor.r,
           targetG: targetColor.g,
           targetB: targetColor.b,
-          size: originalSize,
-          speed: Math.random() * 1.2 + 0.8,
+          size: originalParticleSize,
+          originalSize: originalParticleSize,
+          speed: Math.random() * 1.5 + 0.7,
           noiseOffset: Math.random() * 100,
           angle: Math.random() * Math.PI * 2,
         });
@@ -121,16 +133,16 @@ export const ParticleTransitionCanvas = ({
 
     // 2. Cosmic Ambient Parallax Stars (Background Layer)
     const ambientStars = [];
-    const ambientStarCount = 80;
+    const ambientStarCount = 120; // Increased count for starry depth
     for (let i = 0; i < ambientStarCount; i++) {
       const color = morphPalette[Math.floor(Math.random() * morphPalette.length)];
       ambientStars.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        size: Math.random() * 2 + 1,
-        color: `rgba(${color.r}, ${color.g}, ${color.b}, ${Math.random() * 0.3 + 0.1})`,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        size: Math.random() * 1.5 + 0.5, // Tiny ambient stars
+        color: `rgba(${color.r}, ${color.g}, ${color.b}, ${Math.random() * 0.35 + 0.1})`,
       });
     }
 
@@ -146,19 +158,26 @@ export const ParticleTransitionCanvas = ({
     const durationReveal = 300;     // Phase 3: Smooth canvas clearing fade
     const totalDuration = toggleTime + durationRegroup + durationReveal; // 1600ms total
 
-    // Physics constants for premium, elastic flow
-    const springStrength = 0.055;
-    const friction = 0.84;
+    // Physics constants for smooth, delicate sand-like drift
+    const springStrength = 0.06;
+    const friction = 0.85;
 
     // Main animation loop
     const animate = (timestamp) => {
       if (!startTime) startTime = timestamp;
       const elapsed = timestamp - startTime;
 
-      // Ensure canvas clears perfectly per frame
+      // Clear canvas
       ctx.clearRect(0, 0, width, height);
 
-      // A. Draw Ambient Parallax Stars (Background Cosmic Dust)
+      // A. Draw a smooth solid background that fades in to cover the transition
+      const bgProgress = Math.min(1.0, elapsed / 450); // fades in over 450ms
+      ctx.fillStyle = direction === 'to-dark' 
+        ? `rgba(26, 26, 27, ${bgProgress})`  // Deep Obsidian
+        : `rgba(255, 255, 255, ${bgProgress})`; // Pure White
+      ctx.fillRect(0, 0, width, height);
+
+      // B. Draw Ambient Parallax Stars (Background Cosmic Dust)
       for (const star of ambientStars) {
         star.x += star.vx;
         star.y += star.vy;
@@ -173,7 +192,7 @@ export const ParticleTransitionCanvas = ({
         ctx.fill();
       }
 
-      // B. Trigger Under-the-Hood Theme Swap at peak dispersion (750ms)
+      // C. Trigger Under-the-Hood Theme Swap at peak dispersion (750ms)
       if (elapsed >= toggleTime && !hasToggledTheme) {
         hasToggledTheme = true;
         if (onThemeToggleRef.current) {
@@ -181,7 +200,7 @@ export const ParticleTransitionCanvas = ({
         }
       }
 
-      // C. Render and Simulate Core Viewport Particles
+      // D. Render and Simulate Core Viewport Particles
       for (const p of particles) {
         // Phase Calculations
         if (elapsed < durationJitter) {
@@ -189,29 +208,29 @@ export const ParticleTransitionCanvas = ({
           const progress = elapsed / durationJitter;
           const jitterMax = progress * 3.5;
           
-          p.x = p.originX + Math.sin(timestamp * 0.06 + p.noiseOffset) * jitterMax;
-          p.y = p.originY + Math.cos(timestamp * 0.06 + p.noiseOffset) * jitterMax;
+          p.x = p.originX + Math.sin(timestamp * 0.07 + p.noiseOffset) * jitterMax;
+          p.y = p.originY + Math.cos(timestamp * 0.07 + p.noiseOffset) * jitterMax;
 
-          // Gentle pulse in particle opacity
-          p.a = p.origA * (1 - progress * 0.1);
+          // Gentle opacity pulse
+          p.a = p.origA * (1 - progress * 0.08);
         } 
         else if (elapsed < toggleTime) {
-          // PHASE 1: Dispersion / Dissolve (Shrink to glowing stardust and drift)
+          // PHASE 1: Dispersion / Dissolve (Shrink to microscopic dust and drift)
           const progress = (elapsed - durationJitter) / durationDisperse;
           
           // Organic sine/cosine noise wind
           p.angle += Math.sin(p.noiseOffset + elapsed * 0.005) * 0.05;
-          const driftSpeed = p.speed * (1.2 - progress * 0.4);
+          const driftSpeed = p.speed * (1.3 - progress * 0.4);
           
           p.vx += Math.cos(p.angle) * driftSpeed * 0.12;
           p.vy += Math.sin(p.angle) * driftSpeed * 0.12;
           
-          // Accelerate outward slightly from center to increase dispersion depth
+          // Gently push particles outward from center
           const dxFromCenter = p.originX - width / 2;
           const dyFromCenter = p.originY - height / 2;
           const dist = Math.sqrt(dxFromCenter * dxFromCenter + dyFromCenter * dyFromCenter) || 1;
-          p.vx += (dxFromCenter / dist) * 0.07;
-          p.vy += (dyFromCenter / dist) * 0.07;
+          p.vx += (dxFromCenter / dist) * 0.06;
+          p.vy += (dyFromCenter / dist) * 0.06;
 
           p.x += p.vx;
           p.y += p.vy;
@@ -219,19 +238,19 @@ export const ParticleTransitionCanvas = ({
           p.vx *= 0.94;
           p.vy *= 0.94;
 
-          // Morph colors and shrink sizes into tiny glowing stardust
+          // Morph colors and shrink sizes into tiny star dots
           p.r = p.r + (p.targetR - p.r) * progress * 0.15;
           p.g = p.g + (p.targetG - p.g) * progress * 0.15;
           p.b = p.b + (p.targetB - p.b) * progress * 0.15;
           
-          const targetMinSize = Math.max(1.8, originalSize * 0.25);
+          const targetMinSize = Math.max(0.4, p.originalSize * 0.2);
           p.size = p.size + (targetMinSize - p.size) * progress * 0.15;
           
           // Smooth cosmic fade
-          p.a = p.origA * (0.85 - progress * 0.5);
+          p.a = p.origA * (0.85 - progress * 0.45);
         } 
         else if (elapsed < toggleTime + durationRegroup) {
-          // PHASE 2: Magnetic Regrouping (Grow back to solid cell blocks)
+          // PHASE 2: Magnetic Regrouping (Grow back to standard fine scale)
           const progress = (elapsed - toggleTime) / durationRegroup;
 
           // Spring-mass physics pull back to origins
@@ -247,22 +266,21 @@ export const ParticleTransitionCanvas = ({
           p.x += p.vx;
           p.y += p.vy;
 
-          // Gradually morph color, size, and opacity back towards standard solid pixel block states
+          // Gradually morph color, size, and opacity back
           p.r = p.r + (p.origR - p.r) * progress * 0.22;
           p.g = p.g + (p.origG - p.g) * progress * 0.22;
           p.b = p.b + (p.origB - p.b) * progress * 0.22;
           
-          p.size = p.size + (originalSize - p.size) * progress * 0.25;
+          p.size = p.size + (p.originalSize - p.size) * progress * 0.25;
           p.a = p.a + (p.origA - p.a) * progress * 0.25;
         } 
         else {
           // PHASE 3: Reveal Smooth Canvas Fade
           const progress = (elapsed - (toggleTime + durationRegroup)) / durationReveal;
           
-          // Let particles settle exactly at their home slots
           p.x = p.originX;
           p.y = p.originY;
-          p.size = originalSize;
+          p.size = p.originalSize;
           
           // Clean fade-out of particle alphas to blend canvas perfectly with underlying DOM
           p.a = p.origA * (1 - progress);
@@ -270,8 +288,6 @@ export const ParticleTransitionCanvas = ({
 
         // Draw individual particle
         ctx.fillStyle = `rgba(${Math.round(p.r)}, ${Math.round(p.g)}, ${Math.round(p.b)}, ${p.a})`;
-        
-        // Fast optimized block draws
         ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
       }
 
