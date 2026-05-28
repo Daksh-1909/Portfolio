@@ -34,15 +34,15 @@ function App() {
   const toggleDarkMode = () => {
     setThemeTransition({ active: true });
     
-    // Toggle the theme state exactly as the two diagonal lines meet in the center (330ms)
+    // Toggle the theme state exactly at the midpoint of the horizontal laser sweep (430ms)
     setTimeout(() => {
       setDarkMode((prev) => !prev);
-    }, 330);
+    }, 430);
     
     // Deactivate the overlay container after animation completion
     setTimeout(() => {
       setThemeTransition({ active: false });
-    }, 800);
+    }, 950);
   };
 
   const addToast = (message, type = 'success') => {
@@ -56,11 +56,10 @@ function App() {
 
   return (
     <>
-      {/* Premium Cyber Slash Theme Transition Overlay */}
+      {/* Premium Horizontal Laser Sweep Theme Transition Overlay */}
       {themeTransition.active && (
-        <div className="slash-transition-container active">
-          <div className="slash-panel slash-panel-top" />
-          <div className="slash-panel slash-panel-bottom" />
+        <div className="sweep-transition-container active">
+          <div className="sweep-panel" />
         </div>
       )}
 

@@ -1564,8 +1564,8 @@ body.dark-mode .splash-text {
   color: #ffffff;
 }
 
-/* Cyber Slash Theme Transition Overlay */
-.slash-transition-container {
+/* Horizontal Laser Sweep Transition */
+.sweep-transition-container {
   position: fixed;
   inset: 0;
   pointer-events: none;
@@ -1573,65 +1573,32 @@ body.dark-mode .splash-text {
   overflow: hidden;
 }
 
-.slash-panel {
+.sweep-panel {
   position: absolute;
-  width: 150%;
-  height: 60vh;
-  background: linear-gradient(135deg, #ffffff, #f7f7f9);
-  border-bottom: 5px solid hsl(var(--accent-cyan));
-  box-shadow: 0 0 50px hsl(var(--accent-cyan) / 0.4);
-  transform: skewY(-15deg) translateY(0);
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at right, hsl(var(--accent-cyan) / 0.9) 0%, hsl(var(--accent-violet)) 100%);
+  border-right: 6px solid hsl(var(--accent-cyan));
+  box-shadow: 0 0 80px hsl(var(--accent-cyan) / 0.6);
   will-change: transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
 
-body.dark-mode .slash-panel {
-  background: linear-gradient(135deg, #1A1A1B, #0b1329);
-  border-color: hsl(var(--accent-cyan));
-  box-shadow: 0 0 50px hsl(var(--accent-cyan) / 0.4);
+.sweep-transition-container.active .sweep-panel {
+  animation: sweep-wipe 0.9s cubic-bezier(0.76, 0, 0.24, 1) forwards;
 }
 
-.slash-panel-top {
-  top: -75vh;
-  left: -25%;
-}
-
-.slash-panel-bottom {
-  bottom: -75vh;
-  left: -25%;
-  border-bottom: none;
-  border-top: 5px solid hsl(var(--accent-cyan));
-}
-
-.slash-transition-container.active .slash-panel-top {
-  animation: slash-in-top 0.8s cubic-bezier(0.76, 0, 0.24, 1) forwards;
-}
-
-.slash-transition-container.active .slash-panel-bottom {
-  animation: slash-in-bottom 0.8s cubic-bezier(0.76, 0, 0.24, 1) forwards;
-}
-
-@keyframes slash-in-top {
+@keyframes sweep-wipe {
   0% {
-    transform: skewY(-15deg) translateY(0);
+    transform: translateX(0%);
   }
-  42%, 58% {
-    transform: skewY(-15deg) translateY(80vh);
+  48%, 52% {
+    transform: translateX(100%);
   }
   100% {
-    transform: skewY(-15deg) translateY(170vh);
-  }
-}
-
-@keyframes slash-in-bottom {
-  0% {
-    transform: skewY(-15deg) translateY(0);
-  }
-  42%, 58% {
-    transform: skewY(-15deg) translateY(-80vh);
-  }
-  100% {
-    transform: skewY(-15deg) translateY(-170vh);
+    transform: translateX(200%);
   }
 }
