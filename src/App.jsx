@@ -29,8 +29,29 @@ function App() {
     }
   }, [darkMode]);
 
-  const toggleDarkMode = () => {
-    setDarkMode((prev) => !prev);
+  const [themeTransition, setThemeTransition] = useState({ active: false, x: 0, y: 0 });
+
+  const toggleDarkMode = (e) => {
+    let x = window.innerWidth / 2;
+    let y = window.innerHeight / 2;
+    
+    // Capture user click coordinates if event is provided
+    if (e && e.clientX && e.clientY) {
+      x = e.clientX;
+      y = e.clientY;
+    }
+    
+    setThemeTransition({ active: true, x, y });
+    
+    // Toggle the theme state exactly at the midpoint peak of the wave expansion
+    setTimeout(() => {
+      setDarkMode((prev) => !prev);
+    }, 420);
+    
+    // Deactivate the overlay after animation completion
+    setTimeout(() => {
+      setThemeTransition({ active: false, x: 0, y: 0 });
+    }, 850);
   };
 
   const addToast = (message, type = 'success') => {
@@ -44,6 +65,17 @@ function App() {
 
   return (
     <>
+      {/* Premium Ambient Theme Wave Transition Overlay */}
+      {themeTransition.active && (
+        <div 
+          className="theme-transition-overlay active" 
+          style={{ 
+            left: `${themeTransition.x}px`, 
+            top: `${themeTransition.y}px` 
+          }} 
+        />
+      )}
+
       {/* Target Cursor Effect */}
       <TargetCursor hideDefaultCursor={true} color="#B2945B" targetSelector="button, a, [data-target='true'], .cursor-target" />
 

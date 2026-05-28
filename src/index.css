@@ -1536,3 +1536,36 @@ body.dark-mode .splash-screen {
 body.dark-mode .splash-text {
   color: #ffffff;
 }
+
+/* Theme Transition Radial Overlay */
+.theme-transition-overlay {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 999999;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  background: radial-gradient(circle, hsl(var(--accent-cyan)) 0%, hsl(var(--accent-violet)) 100%);
+  box-shadow: 0 0 100px hsl(var(--accent-cyan) / 0.4);
+  width: 100vmax;
+  height: 100vmax;
+}
+
+.theme-transition-overlay.active {
+  animation: theme-wave 0.85s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+
+@keyframes theme-wave {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(2.2);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(3.5);
+    opacity: 0;
+  }
+}
