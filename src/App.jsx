@@ -34,10 +34,10 @@ function App() {
   const toggleDarkMode = () => {
     setThemeTransition({ active: true });
     
-    // Toggle the theme state exactly at the midpoint peak of the diagonal slashes overlap
+    // Toggle the theme state exactly as the two diagonal lines meet in the center (330ms)
     setTimeout(() => {
       setDarkMode((prev) => !prev);
-    }, 370);
+    }, 330);
     
     // Deactivate the overlay container after animation completion
     setTimeout(() => {
