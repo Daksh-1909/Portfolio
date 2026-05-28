@@ -100,11 +100,11 @@ export const TargetCursor: React.FC<TargetCursorProps> = ({
                     rightColor = parts[0].trim();
                 }
             } else if (target.classList.contains('btn-primary')) {
-                leftColor = '#06b6d4'; // accent-cyan
-                rightColor = '#8b5cf6'; // accent-violet
+                leftColor = '#B2945B'; // --color-accent
+                rightColor = '#8C6E30'; // secondary gold/bronze
             } else if (target.classList.contains('btn-outline')) {
-                leftColor = '#06b6d4';
-                rightColor = '#06b6d4';
+                leftColor = '#B2945B';
+                rightColor = '#B2945B';
             } else {
                 const borderColor = computedStyle.borderColor;
                 const textColor = computedStyle.color;
