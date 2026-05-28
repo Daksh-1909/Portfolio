@@ -1554,6 +1554,9 @@ body.dark-mode .splash-text {
   border-bottom: 5px solid hsl(var(--accent-cyan));
   box-shadow: 0 0 50px hsl(var(--accent-cyan) / 0.4);
   transform: skewY(-15deg) translateY(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 body.dark-mode .slash-panel {
@@ -1575,11 +1578,11 @@ body.dark-mode .slash-panel {
 }
 
 .slash-transition-container.active .slash-panel-top {
-  animation: slash-in-top 0.8s cubic-bezier(0.86, 0, 0.07, 1) forwards;
+  animation: slash-in-top 0.8s cubic-bezier(0.76, 0, 0.24, 1) forwards;
 }
 
 .slash-transition-container.active .slash-panel-bottom {
-  animation: slash-in-bottom 0.8s cubic-bezier(0.86, 0, 0.07, 1) forwards;
+  animation: slash-in-bottom 0.8s cubic-bezier(0.76, 0, 0.24, 1) forwards;
 }
 
 @keyframes slash-in-top {
