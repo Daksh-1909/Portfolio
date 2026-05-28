@@ -217,6 +217,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .btn-primary {
   background: linear-gradient(135deg, hsl(var(--accent-cyan)), hsl(var(--accent-violet)));
+  background-repeat: no-repeat;
   color: #ffffff;
   box-shadow: 0 4px 20px hsl(var(--accent-cyan) / 0.25);
 }
@@ -554,6 +555,7 @@ h1, h2, h3, h4, h5, h6 {
 .skills-tab-btn.active {
   color: #ffffff;
   background: linear-gradient(135deg, hsl(var(--accent-cyan)), hsl(var(--accent-violet)));
+  background-repeat: no-repeat;
   border-color: transparent;
   box-shadow: 0 5px 15px hsl(var(--accent-cyan) / 0.2);
 }
