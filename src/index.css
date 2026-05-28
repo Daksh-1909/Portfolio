@@ -55,6 +55,33 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Smooth Global Theme transitions */
+body, 
+.section, 
+.section-alt, 
+.navbar, 
+.glass-card, 
+h1, h2, h3, h4, h5, h6, 
+p, 
+span, 
+a:not(.logo):not(.nav-link), 
+input, 
+textarea, 
+.stat-card, 
+.skill-card, 
+.project-card, 
+.cert-card,
+.contact-card,
+.contact-info-icon,
+.contact-social-link,
+.toast {
+  transition: background-color 0.5s ease, 
+              color 0.5s ease, 
+              border-color 0.5s ease, 
+              box-shadow 0.5s ease, 
+              backdrop-filter 0.5s ease;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
