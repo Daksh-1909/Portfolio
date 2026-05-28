@@ -7,6 +7,15 @@ export const ParticleTransitionCanvas = ({
   onComplete,
 }) => {
   const canvasRef = useRef(null);
+  
+  // Store callbacks in refs to break React re-render dependency loop
+  const onThemeToggleRef = useRef(onThemeToggle);
+  const onCompleteRef = useRef(onComplete);
+
+  useEffect(() => {
+    onThemeToggleRef.current = onThemeToggle;
+    onCompleteRef.current = onComplete;
+  }, [onThemeToggle, onComplete]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -61,6 +70,7 @@ export const ParticleTransitionCanvas = ({
     ];
 
     const morphPalette = direction === 'to-dark' ? darkMorphColors : lightMorphColors;
+    const originalSize = step * 1.15; // Slightly larger than step to prevent grid lines when solid
 
     for (let y = 0; y < height; y += step) {
       for (let x = 0; x < width; x += step) {
@@ -101,7 +111,7 @@ export const ParticleTransitionCanvas = ({
           targetR: targetColor.r,
           targetG: targetColor.g,
           targetB: targetColor.b,
-          size: Math.random() * 1.5 + 1.2,
+          size: originalSize,
           speed: Math.random() * 1.2 + 0.8,
           noiseOffset: Math.random() * 100,
           angle: Math.random() * Math.PI * 2,
@@ -111,16 +121,16 @@ export const ParticleTransitionCanvas = ({
 
     // 2. Cosmic Ambient Parallax Stars (Background Layer)
     const ambientStars = [];
-    const ambientStarCount = 100;
+    const ambientStarCount = 80;
     for (let i = 0; i < ambientStarCount; i++) {
       const color = morphPalette[Math.floor(Math.random() * morphPalette.length)];
       ambientStars.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
         size: Math.random() * 2 + 1,
-        color: `rgba(${color.r}, ${color.g}, ${color.b}, ${Math.random() * 0.4 + 0.15})`,
+        color: `rgba(${color.r}, ${color.g}, ${color.b}, ${Math.random() * 0.3 + 0.1})`,
       });
     }
 
@@ -136,9 +146,9 @@ export const ParticleTransitionCanvas = ({
     const durationReveal = 300;     // Phase 3: Smooth canvas clearing fade
     const totalDuration = toggleTime + durationRegroup + durationReveal; // 1600ms total
 
-    // Physics constants
-    const springStrength = 0.08;
-    const friction = 0.82;
+    // Physics constants for premium, elastic flow
+    const springStrength = 0.055;
+    const friction = 0.84;
 
     // Main animation loop
     const animate = (timestamp) => {
@@ -166,57 +176,62 @@ export const ParticleTransitionCanvas = ({
       // B. Trigger Under-the-Hood Theme Swap at peak dispersion (750ms)
       if (elapsed >= toggleTime && !hasToggledTheme) {
         hasToggledTheme = true;
-        onThemeToggle();
+        if (onThemeToggleRef.current) {
+          onThemeToggleRef.current();
+        }
       }
 
       // C. Render and Simulate Core Viewport Particles
       for (const p of particles) {
         // Phase Calculations
         if (elapsed < durationJitter) {
-          // PHASE 0: Vibration / Jitter
+          // PHASE 0: Organic Sine Jitter/Vibration
           const progress = elapsed / durationJitter;
-          const jitterMax = progress * 4; // increasing vibration
-          p.x = p.originX + (Math.random() - 0.5) * jitterMax;
-          p.y = p.originY + (Math.random() - 0.5) * jitterMax;
+          const jitterMax = progress * 3.5;
+          
+          p.x = p.originX + Math.sin(timestamp * 0.06 + p.noiseOffset) * jitterMax;
+          p.y = p.originY + Math.cos(timestamp * 0.06 + p.noiseOffset) * jitterMax;
 
-          // Gentle fade in particle alpha to simulate glowing state
-          p.a = p.origA * (1 - progress * 0.15);
+          // Gentle pulse in particle opacity
+          p.a = p.origA * (1 - progress * 0.1);
         } 
         else if (elapsed < toggleTime) {
-          // PHASE 1: Dispersion / Dissolve
+          // PHASE 1: Dispersion / Dissolve (Shrink to glowing stardust and drift)
           const progress = (elapsed - durationJitter) / durationDisperse;
           
           // Organic sine/cosine noise wind
           p.angle += Math.sin(p.noiseOffset + elapsed * 0.005) * 0.05;
-          const driftSpeed = p.speed * (1.2 - progress * 0.5);
+          const driftSpeed = p.speed * (1.2 - progress * 0.4);
           
-          p.vx += Math.cos(p.angle) * driftSpeed * 0.15;
-          p.vy += Math.sin(p.angle) * driftSpeed * 0.15;
+          p.vx += Math.cos(p.angle) * driftSpeed * 0.12;
+          p.vy += Math.sin(p.angle) * driftSpeed * 0.12;
           
           // Accelerate outward slightly from center to increase dispersion depth
           const dxFromCenter = p.originX - width / 2;
           const dyFromCenter = p.originY - height / 2;
           const dist = Math.sqrt(dxFromCenter * dxFromCenter + dyFromCenter * dyFromCenter) || 1;
-          p.vx += (dxFromCenter / dist) * 0.08;
-          p.vy += (dyFromCenter / dist) * 0.08;
+          p.vx += (dxFromCenter / dist) * 0.07;
+          p.vy += (dyFromCenter / dist) * 0.07;
 
           p.x += p.vx;
           p.y += p.vy;
 
-          // Drag/Friction to avoid infinite velocity
-          p.vx *= 0.95;
-          p.vy *= 0.95;
+          p.vx *= 0.94;
+          p.vy *= 0.94;
 
-          // Morph colors and transparency into target cosmic dust styles
+          // Morph colors and shrink sizes into tiny glowing stardust
           p.r = p.r + (p.targetR - p.r) * progress * 0.15;
           p.g = p.g + (p.targetG - p.g) * progress * 0.15;
           p.b = p.b + (p.targetB - p.b) * progress * 0.15;
           
+          const targetMinSize = Math.max(1.8, originalSize * 0.25);
+          p.size = p.size + (targetMinSize - p.size) * progress * 0.15;
+          
           // Smooth cosmic fade
-          p.a = p.origA * (0.85 - progress * 0.55);
+          p.a = p.origA * (0.85 - progress * 0.5);
         } 
         else if (elapsed < toggleTime + durationRegroup) {
-          // PHASE 2: Magnetic Regrouping
+          // PHASE 2: Magnetic Regrouping (Grow back to solid cell blocks)
           const progress = (elapsed - toggleTime) / durationRegroup;
 
           // Spring-mass physics pull back to origins
@@ -226,19 +241,18 @@ export const ParticleTransitionCanvas = ({
           p.vx += dx * springStrength;
           p.vy += dy * springStrength;
           
-          // Dampen speeds using friction to stabilize regrouping
           p.vx *= friction;
           p.vy *= friction;
           
           p.x += p.vx;
           p.y += p.vy;
 
-          // Gradually morph color and opacity back towards standard pixel colors
-          p.r = p.r + (p.origR - p.r) * progress * 0.2;
-          p.g = p.g + (p.origG - p.g) * progress * 0.2;
-          p.b = p.b + (p.origB - p.b) * progress * 0.2;
+          // Gradually morph color, size, and opacity back towards standard solid pixel block states
+          p.r = p.r + (p.origR - p.r) * progress * 0.22;
+          p.g = p.g + (p.origG - p.g) * progress * 0.22;
+          p.b = p.b + (p.origB - p.b) * progress * 0.22;
           
-          // Fade back up to full visibility
+          p.size = p.size + (originalSize - p.size) * progress * 0.25;
           p.a = p.a + (p.origA - p.a) * progress * 0.25;
         } 
         else {
@@ -248,6 +262,7 @@ export const ParticleTransitionCanvas = ({
           // Let particles settle exactly at their home slots
           p.x = p.originX;
           p.y = p.originY;
+          p.size = originalSize;
           
           // Clean fade-out of particle alphas to blend canvas perfectly with underlying DOM
           p.a = p.origA * (1 - progress);
@@ -256,21 +271,17 @@ export const ParticleTransitionCanvas = ({
         // Draw individual particle
         ctx.fillStyle = `rgba(${Math.round(p.r)}, ${Math.round(p.g)}, ${Math.round(p.b)}, ${p.a})`;
         
-        // Optimize rendering using fast fillRect blocks instead of heavy circle arcs
-        if (p.size > 2) {
-          // Render larger particles as squares to keep fill operations rapid
-          ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
-        } else {
-          // Simple fast pixel-level render
-          ctx.fillRect(p.x, p.y, p.size, p.size);
-        }
+        // Fast optimized block draws
+        ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
       }
 
       if (elapsed < totalDuration) {
         animationFrameId = requestAnimationFrame(animate);
       } else {
         // Timeline completed successfully
-        onComplete();
+        if (onCompleteRef.current) {
+          onCompleteRef.current();
+        }
       }
     };
 
@@ -281,7 +292,7 @@ export const ParticleTransitionCanvas = ({
         cancelAnimationFrame(animationFrameId);
       }
     };
-  }, [screenshotCanvas, direction, onThemeToggle, onComplete]);
+  }, [screenshotCanvas, direction]);
 
   return (
     <div className="particle-transition-overlay">
