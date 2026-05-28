@@ -45,7 +45,7 @@ function App() {
   return (
     <>
       {/* Target Cursor Effect */}
-      <TargetCursor hideDefaultCursor={true} color="#B2945B" targetSelector="button, a, [data-target='true'], .cursor-target, .project-card, .cert-card" />
+      <TargetCursor hideDefaultCursor={true} color="#B2945B" targetSelector="button, a, [data-target='true'], .cursor-target" />
 
       {/* Intro Starting Animation Screen */}
       {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
