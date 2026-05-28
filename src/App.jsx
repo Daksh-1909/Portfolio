@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import html2canvas from 'html2canvas';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { About } from './components/About';
@@ -10,6 +11,7 @@ import { Footer } from './components/Footer';
 import { ToastContainer } from './components/Toast';
 import { SplashScreen } from './components/SplashScreen';
 import { TargetCursor } from './components/TargetCursor';
+import { ParticleTransitionCanvas } from './components/ParticleTransitionCanvas';
 
 function App() {
   const [toasts, setToasts] = useState([]);
@@ -29,22 +31,44 @@ function App() {
     }
   }, [darkMode]);
 
-  const [themeTransition, setThemeTransition] = useState({ active: false, direction: 'to-dark' });
+  const [themeTransition, setThemeTransition] = useState({
+    active: false,
+    screenshotCanvas: null,
+    direction: 'to-dark',
+  });
 
   const toggleDarkMode = () => {
-    // If darkMode is currently true, we are going to the light theme, otherwise dark
+    if (themeTransition.active) return;
+
+    // Lock scrolling immediately to prevent layout calculations during capture
+    document.body.classList.add('scroll-locked');
     const targetDirection = darkMode ? 'to-light' : 'to-dark';
-    setThemeTransition({ active: true, direction: targetDirection });
-    
-    // Toggle the theme state exactly at the midpoint peak of the staggered panels overlap (500ms)
-    setTimeout(() => {
-      setDarkMode((prev) => !prev);
-    }, 500);
-    
-    // Deactivate the overlay container after animation completion
-    setTimeout(() => {
-      setThemeTransition({ active: false, direction: 'to-dark' });
-    }, 1050);
+
+    // Capture the exact visible viewport
+    html2canvas(document.body, {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      scrollX: 0,
+      scrollY: 0,
+      x: window.scrollX,
+      y: window.scrollY,
+      useCORS: true,
+      logging: false,
+      backgroundColor: darkMode ? '#1A1A1B' : '#FFFFFF',
+    })
+      .then((canvas) => {
+        setThemeTransition({
+          active: true,
+          screenshotCanvas: canvas,
+          direction: targetDirection,
+        });
+      })
+      .catch((err) => {
+        console.error('Theme transition capture failed:', err);
+        // Fallback: toggle theme instantly if capture fails
+        setDarkMode((prev) => !prev);
+        document.body.classList.remove('scroll-locked');
+      });
   };
 
   const addToast = (message, type = 'success') => {
@@ -58,16 +82,27 @@ function App() {
 
   return (
     <>
-      {/* Premium Horizontal Laser Sweep Theme Transition Overlay */}
-      {themeTransition.active && (
-        <div className="sweep-transition-container active">
-          <div className="sweep-panel-gold" />
-          <div className={`sweep-panel-mode ${themeTransition.direction}`} />
-        </div>
+      {/* Cinematic Particle Morph Theme Transition Canvas Overlay */}
+      {themeTransition.active && themeTransition.screenshotCanvas && (
+        <ParticleTransitionCanvas
+          screenshotCanvas={themeTransition.screenshotCanvas}
+          direction={themeTransition.direction}
+          onThemeToggle={() => setDarkMode((prev) => !prev)}
+          onComplete={() => {
+            setThemeTransition({
+              active: false,
+              screenshotCanvas: null,
+              direction: 'to-dark',
+            });
+            document.body.classList.remove('scroll-locked');
+          }}
+        />
       )}
 
-      {/* Target Cursor Effect */}
-      <TargetCursor hideDefaultCursor={true} color="#B2945B" targetSelector="button, a, [data-target='true'], .cursor-target" />
+      {/* Target Cursor Effect (Hidden during particle transition) */}
+      {!themeTransition.active && (
+        <TargetCursor hideDefaultCursor={true} color="#B2945B" targetSelector="button, a, [data-target='true'], .cursor-target" />
+      )}
 
       {/* Intro Starting Animation Screen */}
       {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}

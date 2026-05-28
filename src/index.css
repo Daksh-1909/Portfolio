@@ -1564,78 +1564,28 @@ body.dark-mode .splash-text {
   color: #ffffff;
 }
 
-/* Horizontal Laser Sweep Transition */
-.sweep-transition-container {
+/* Cinematic Particle Morph Theme Transition */
+.particle-transition-overlay {
   position: fixed;
   inset: 0;
-  pointer-events: none;
   z-index: 999999;
+  pointer-events: none;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
 }
 
-.sweep-panel-gold {
-  position: absolute;
-  top: 0;
-  left: -20%;
-  width: 20%;
-  height: 100%;
-  background: linear-gradient(90deg, #8C6E30 0%, #B2945B 50%, #C5A059 100%);
-  border-right: 4px solid #B2945B;
-  box-shadow: 0 0 60px rgba(178, 148, 91, 0.7);
+.particle-canvas {
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  background: transparent;
   will-change: transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  z-index: 2;
 }
 
-.sweep-panel-mode {
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  will-change: transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  z-index: 1;
-}
-
-.sweep-panel-mode.to-dark {
-  background: #1A1A1B;
-}
-
-.sweep-panel-mode.to-light {
-  background: #FFFFFF;
-}
-
-.sweep-transition-container.active .sweep-panel-gold {
-  animation: sweep-gold-wipe 0.95s cubic-bezier(0.76, 0, 0.24, 1) forwards;
-}
-
-.sweep-transition-container.active .sweep-panel-mode {
-  animation: sweep-mode-wipe 0.95s cubic-bezier(0.76, 0, 0.24, 1) 0.08s forwards;
-}
-
-@keyframes sweep-gold-wipe {
-  0% {
-    transform: translateX(0%);
-  }
-  48%, 54% {
-    transform: translateX(450%);
-  }
-  100% {
-    transform: translateX(800%);
-  }
-}
-
-@keyframes sweep-mode-wipe {
-  0% {
-    transform: translateX(0%);
-  }
-  48%, 54% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(200%);
-  }
+body.scroll-locked {
+  overflow: hidden !important;
+  height: 100vh !important;
 }
