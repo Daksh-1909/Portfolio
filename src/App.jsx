@@ -36,15 +36,15 @@ function App() {
     const targetDirection = darkMode ? 'to-light' : 'to-dark';
     setThemeTransition({ active: true, direction: targetDirection });
     
-    // Toggle the theme state exactly at the midpoint of the horizontal laser sweep (430ms)
+    // Toggle the theme state exactly at the midpoint peak of the staggered panels overlap (500ms)
     setTimeout(() => {
       setDarkMode((prev) => !prev);
-    }, 430);
+    }, 500);
     
     // Deactivate the overlay container after animation completion
     setTimeout(() => {
       setThemeTransition({ active: false, direction: 'to-dark' });
-    }, 950);
+    }, 1050);
   };
 
   const addToast = (message, type = 'success') => {
@@ -61,7 +61,8 @@ function App() {
       {/* Premium Horizontal Laser Sweep Theme Transition Overlay */}
       {themeTransition.active && (
         <div className="sweep-transition-container active">
-          <div className={`sweep-panel ${themeTransition.direction}`} />
+          <div className="sweep-panel-gold" />
+          <div className={`sweep-panel-mode ${themeTransition.direction}`} />
         </div>
       )}
 
